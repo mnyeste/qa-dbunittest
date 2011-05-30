@@ -1,38 +1,35 @@
 package com.baxter.qa.dbunittest;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
+import org.junit.Test;
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+public class AppTest {
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
-    }
+	@Test
+	public void testDBConnection() {
+
+	    try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		Connection conn = null;
+		Properties connectionProps = new Properties();
+		connectionProps.put("user", "qa");
+		connectionProps.put("password", "qa");
+
+		try {
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.9.221:1521:BAXTERDB",connectionProps);
+			System.out.println("Connected to database");
+			conn.close();
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+	}
+
 }
